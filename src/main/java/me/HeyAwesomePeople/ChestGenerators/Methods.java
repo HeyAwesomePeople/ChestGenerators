@@ -32,7 +32,7 @@ public class Methods {
         FileConfiguration config = plugin.genConfig.getCustomConfig();
         int a = 0;
         for (String s : config.getConfigurationSection("generators").getKeys(false)) {
-            plugin.generators.put(s, new ChestGeneratorType(Utils.convertColor(config.getString("generators." + s + ".name")), config.getInt("generators." + s + ".quantity"), s,
+            plugin.generators.put(s, new ChestGeneratorType(Utils.convertColor(config.getString("generators." + s + ".name")), config.getInt("generators." + s + ".quantity"), s.toLowerCase(),
                     getItems("generators." + s + ".item", config),
                     config.getInt("generators." + s + ".tickRate"),
                     config.getStringList("generators." + s + ".lore")));

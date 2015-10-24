@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -59,10 +60,8 @@ public class ChestGenerators extends JavaPlugin {
 
     @Override
     public void onDisable() {
-
+        this.reloadConfig();
     }
-
-    //TODO commands to get chests, commands to edit
 
     public boolean onCommand(final CommandSender sender, Command cmd,
                              String commandLabel, final String[] args) {
@@ -82,9 +81,11 @@ public class ChestGenerators extends JavaPlugin {
                         sender.sendMessage(ChatColor.RED + "That chest generator is not valid!");
                         return false;
                     }
-                    if (generators.containsKey(name)) {
-                        Bukkit.getPlayer(args[1]).getInventory().addItem(generators.get(name).getChest());
+                    if (!generators.containsKey(name.toLowerCase())) {
+                        sender.sendMessage(ChatColor.RED + "Chest generator was unable to be accessed. Available generators: " + Arrays.toString(generators.keySet().toArray()));
+                        return false;
                     }
+                    Bukkit.getPlayer(args[1]).getInventory().addItem(generators.get(name).getChest());
                 }
             }
         }

@@ -37,5 +37,9 @@ public class ChestGeneratorType {
         return i;
     }
 
+    public boolean isChestThis(ItemStack i) {
+        if (!i.getType().equals(Material.CHEST)) return false;
+        return i.getItemMeta().getLore().equals(this.lore);
+    }
 
 }

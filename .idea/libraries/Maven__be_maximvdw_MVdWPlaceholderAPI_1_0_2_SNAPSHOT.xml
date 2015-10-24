@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: be.maximvdw:MVdWPlaceholderAPI:1.0.2-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/be/maximvdw/MVdWPlaceholderAPI/1.0.2-SNAPSHOT/MVdWPlaceholderAPI-1.0.2-20150904.220929-1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/be/maximvdw/MVdWPlaceholderAPI/1.0.2-SNAPSHOT/MVdWPlaceholderAPI-1.0.2-20150904.220929-1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/be/maximvdw/MVdWPlaceholderAPI/1.0.2-SNAPSHOT/MVdWPlaceholderAPI-1.0.2-20150904.220929-1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
