@@ -1,0 +1,6 @@
+name: ChestGenerators
+main: me.HeyAwesomePeople.ChestGenerators.ChestGenerators
+version: 2.0
+commands:
+  chestgenerator:
+    description: Main command

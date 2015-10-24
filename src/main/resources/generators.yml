@@ -1,0 +1,9 @@
+generators:
+  irongenerator:
+    name: '&8Iron Generator'
+    tickRate: 600
+    quantity: 1
+    item: 'STEAK:BREAD:DIAMOND:EMERALD'
+    lore:
+      - '&7Generated Item&8: &aIron'
+      - '&7Generation Time&8: &a30 Seconds'
