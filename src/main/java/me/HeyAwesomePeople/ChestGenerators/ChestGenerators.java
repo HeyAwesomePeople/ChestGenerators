@@ -2,17 +2,20 @@ package me.HeyAwesomePeople.ChestGenerators;
 
 import me.HeyAwesomePeople.ChestGenerators.CustomConfigs.ChestConfig;
 import me.HeyAwesomePeople.ChestGenerators.CustomConfigs.GeneratorConfig;
+import me.HeyAwesomePeople.ChestGenerators.CustomConfigs.OldConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 
 
 public class ChestGenerators extends JavaPlugin {
@@ -21,6 +24,7 @@ public class ChestGenerators extends JavaPlugin {
     public Methods methods;
     public ChestConfig chestConfig;
     public GeneratorConfig genConfig;
+    public OldConfig oldConfig;
 
     private File fileconfig = new File(this.getDataFolder() + File.separator + "config.yml");
     private File filechests = new File(this.getDataFolder() + File.separator + "chests.yml");
@@ -34,9 +38,14 @@ public class ChestGenerators extends JavaPlugin {
         methods = new Methods();
         chestConfig = new ChestConfig();
         genConfig = new GeneratorConfig();
+        oldConfig = new OldConfig();
 
         createFiles();
         methods.loadChestGenerators();
+
+        if (!getConfig().getBoolean("convertedOldChests")) {
+            convertOldChests();
+        }
 
         Bukkit.getServer().getPluginManager().registerEvents(new ChestListeners(), this);
 
@@ -53,9 +62,35 @@ public class ChestGenerators extends JavaPlugin {
         }
 
         if (!filegenerators.exists()) {
+            List<String> list  = new ArrayList<String>();
+            list.add("&7Generated Item&8: &aIron");
+            list.add("&7Generation Time&8: &a30 Seconds");
             genConfig.getCustomConfig().set("generators.irongenerator.name", "Iron Generator!");
+            genConfig.getCustomConfig().set("generators.irongenerator.tickRate", 20);
+            genConfig.getCustomConfig().set("generators.irongenerator.quantity", 1);
+            genConfig.getCustomConfig().set("generators.irongenerator.item", "IRON_INGOT");
+            genConfig.getCustomConfig().set("generators.irongenerator.lore", list);
             genConfig.saveCustomConfig();
         }
+    }
+
+    public void convertOldChests() {
+        FileConfiguration config = oldConfig.getOldConfig();
+        for (String s : config.getKeys(false)) {
+            String generator = config.getString(s).toLowerCase();
+            String[] split = s.split("_");
+
+            if (Bukkit.getWorld(split[3]) == null) {
+                continue;
+            }
+
+            Location l = new Location(Bukkit.getWorld(split[3]), Double.parseDouble(split[0]), Double.parseDouble(split[1]), Double.parseDouble(split[2]));
+            if (generators.containsKey(generator)) {
+                generators.get(generator).chests.add(new Chests(l, generators.get(generator)));
+            }
+        }
+        getConfig().set("convertedOldChests", true);
+        Bukkit.broadcastMessage("Converted old chests!");
     }
 
     @Override
@@ -76,6 +111,7 @@ public class ChestGenerators extends JavaPlugin {
                         sender.sendMessage(ChatColor.RED + "Player not online.");
                         return false;
                     }
+                    Player p = Bukkit.getPlayer(args[1]);
                     String chestgenerator = args[2];
                     if (!methods.doesConfigHaveGenerator(args[2])) {
                         sender.sendMessage(ChatColor.RED + "That chest generator is not valid!");
@@ -85,7 +121,17 @@ public class ChestGenerators extends JavaPlugin {
                         sender.sendMessage(ChatColor.RED + "Chest generator was unable to be accessed. Available generators: " + Arrays.toString(generators.keySet().toArray()));
                         return false;
                     }
-                    Bukkit.getPlayer(args[1]).getInventory().addItem(generators.get(name).getChest());
+                    int count = 0;
+                    for (ItemStack i : p.getInventory()) {
+                        if (i == null) count++;
+                    }
+                    if (count > 0) {
+                        p.getInventory().addItem(generators.get(name).getChest());
+                    } else {
+                        p.getWorld().dropItem(p.getLocation(), generators.get(name).getChest());
+                    }
+                } else {
+                    sender.sendMessage(ChatColor.RED + "Invalid subcommand!");
                 }
             }
         }

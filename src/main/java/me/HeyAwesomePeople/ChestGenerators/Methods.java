@@ -3,6 +3,7 @@ package me.HeyAwesomePeople.ChestGenerators;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -13,10 +14,9 @@ import java.util.List;
 public class Methods {
     private ChestGenerators plugin = ChestGenerators.instance;
 
-
     public void startChests() {
         for (ChestGeneratorType g : plugin.generators.values()) {
-            for (ChestRunnable d : g.chests) {
+            for (Chests d : g.chests) {
                 d.startTask();
             }
         }
