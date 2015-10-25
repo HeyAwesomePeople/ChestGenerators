@@ -2,5 +2,5 @@ name: ParallaxGens
 main: me.HeyAwesomePeople.ChestGenerators.ChestGenerators
 version: 2.0
 commands:
-  chestgenerator:
+  chestgenerators:
     description: Main command
