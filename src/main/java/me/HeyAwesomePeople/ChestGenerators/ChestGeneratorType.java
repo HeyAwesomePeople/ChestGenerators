@@ -39,22 +39,17 @@ public class ChestGeneratorType {
         startTask();
     }
 
+    /*********** REPEATING TASK **************/
     public void createTask(final long delay, final long interval) {
-        // This ASync timer is a repeating task which runs on a seperate thread than the main one.
         task = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
             public void run() {
                 System.out.print(name + ":Chests: " + chests.size());
                 if (chests.isEmpty()) {
                     return;
                 }
-                long startTime = System.nanoTime();
+
                 StringBuilder mysqlS = new StringBuilder("INSERT INTO chests (Location, Generator, ToAdd) VALUES ");
                 int runs = 0;
-                // NOTE: this loop right here runs more than a second. Is there any way to get this down?
-                // I am looping through all "Chests" objects and getting two things, an int called amountThatCanBeAdded and Location value.
-                // I then add this into a MySQL syntax which will allow me to push thousands of rows at once.
-                // Since this task runs every second, and this for loop runs for more than a second, the workload just continues to increase which doesn't do
-                // well on your CPU usage.. :D
                 for (final Chests c : chests) {
                     if (runs == chests.size() - 1) {
                         c.increase();
@@ -68,6 +63,7 @@ public class ChestGeneratorType {
                 final String state = mysqlS.toString();
                 final int runF = runs;
 
+                /* TRUNCATE Chests then insert into MySQL */
                 java.sql.PreparedStatement statement;
                 try {
                     statement = plugin.sql.openConnection().prepareStatement("TRUNCATE chests");
@@ -79,8 +75,8 @@ public class ChestGeneratorType {
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
-                long stopTime = System.nanoTime();
-                System.out.print(configName + ": Timing for " + runF + " chests... " + (stopTime - startTime) / 1000000 + "ms!");
+
+
             }
         }, delay, interval);
     }
@@ -93,20 +89,16 @@ public class ChestGeneratorType {
         createTask(nextLong(), this.regen);
     }
 
-    long nextLong() {
-        long leftLimit = 1L;
-        long rightLimit = 20L;
-        return leftLimit + (long) (Math.random() * (rightLimit - leftLimit));
-    }
-
+    /*********** ADD NEW CHEST INTO THE MYSQL **************/
     public void addNewChest(final Chests n) {
         chests.add(n);
-        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "[ChestGenerators] Added chest to " + this.name);
+
         java.sql.PreparedStatement statement;
         try {
             statement = plugin.sql.openConnection().prepareStatement("INSERT INTO chests (Location, Generator, ToAdd)" +
                     " VALUES ('" + Utils.locationToString(n.location) + "','" + configName + "','" + n.amountThatCanBeAdded + "')");
-            statement.executeUpdate();
+            Bukkit.getConsoleSender().sendMessage("Hey, mysql.");
+                    statement.executeUpdate();
         } catch (SQLException sqlE) {
             sqlE.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -114,6 +106,7 @@ public class ChestGeneratorType {
         }
     }
 
+    /*********** LOAD CHESTS FROM MYSQL **************/
     public void loadChests() {
         int count = 0;
         java.sql.PreparedStatement statement;
@@ -135,6 +128,7 @@ public class ChestGeneratorType {
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "[ChestGenerators] Loaded " + count + " " + this.name + ChatColor.GREEN + " chests from MySQL!");
     }
 
+    /*********** GET THIS GENERATORS CHEST ITEM **************/
     public ItemStack getChest() {
         ItemStack i = new ItemStack(Material.CHEST);
         ItemMeta im = i.getItemMeta();
@@ -146,6 +140,7 @@ public class ChestGeneratorType {
         return i;
     }
 
+    /*********** CLEANUP UNUSED CHESTS **************/
     public void cleanChests() {
         for (Chests c : chests) {
             if (c.location.getWorld().getBlockAt(c.location).getState() == null) {
@@ -178,6 +173,12 @@ public class ChestGeneratorType {
 
     public boolean isChestBlockThis(Chest chest) {
         return chest.getBlockInventory().getName().equalsIgnoreCase(this.name) && chest.getBlockInventory().getTitle().equalsIgnoreCase(this.name);
+    }
+
+    long nextLong() {
+        long leftLimit = 1L;
+        long rightLimit = 20L;
+        return leftLimit + (long) (Math.random() * (rightLimit - leftLimit));
     }
 
 }

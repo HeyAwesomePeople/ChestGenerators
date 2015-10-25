@@ -23,7 +23,7 @@ public class ChestListeners implements Listener {
         ItemStack item = e.getItemInHand();
         for (ChestGeneratorType gen : plugin.generators.values()) {
             if (gen.isChestThis(item)) {
-                gen.chests.add(new Chests(e.getBlock().getLocation(), gen, 0));
+                gen.addNewChest(new Chests(e.getBlock().getLocation(), gen, 0));
                 Bukkit.broadcastMessage("Created chest!");
                 break;
             }

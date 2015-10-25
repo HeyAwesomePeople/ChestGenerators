@@ -32,7 +32,7 @@ public class Methods {
                     config.getStringList("generators." + s + ".lore")));
             a++;
         }
-        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "[ChestGenerators] Loaded " + a + " generators!");
+        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "[ParallaxGens] Loaded " + a + " generators!");
     }
 
     public boolean doesConfigHaveGenerator(String s) {
