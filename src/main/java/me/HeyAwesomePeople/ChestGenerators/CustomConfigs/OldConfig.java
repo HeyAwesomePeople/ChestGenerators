@@ -19,7 +19,7 @@ public class OldConfig {
         }
         customConfig = YamlConfiguration.loadConfiguration(customConfigFile);
 
-        InputStream defConfigStream = plugin.getResource("chests.yml");
+        InputStream defConfigStream = plugin.getResource("plugins" + File.separator + "ConfigurableChestGenerators" + File.separator + "chests.yml");
         if (defConfigStream != null) {
             YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
             customConfig.setDefaults(defConfig);

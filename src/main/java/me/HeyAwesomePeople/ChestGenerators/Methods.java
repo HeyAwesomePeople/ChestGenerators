@@ -14,25 +14,20 @@ import java.util.List;
 public class Methods {
     private ChestGenerators plugin = ChestGenerators.instance;
 
-    public void startChests() {
-        for (ChestGeneratorType g : plugin.generators.values()) {
-            for (Chests d : g.chests) {
-                d.startTask();
-            }
-        }
-    }
-
     /*
     Method cleanChests will search every config entry and check if the chest is there. If it isn't, remove it from the config.
     */
     public void cleanChests() {
+        for (ChestGeneratorType gen : plugin.generators.values()) {
+            gen.cleanChests();
+        }
     }
 
     public void loadChestGenerators() {
         FileConfiguration config = plugin.genConfig.getCustomConfig();
         int a = 0;
         for (String s : config.getConfigurationSection("generators").getKeys(false)) {
-            plugin.generators.put(s, new ChestGeneratorType(Utils.convertColor(config.getString("generators." + s + ".name")), config.getInt("generators." + s + ".quantity"), s.toLowerCase(),
+            plugin.generators.put(s, new ChestGeneratorType(s.toLowerCase(), config.getInt("generators." + s + ".quantity"), Utils.convertColor(config.getString("generators." + s + ".name")),
                     getItems("generators." + s + ".item", config),
                     config.getInt("generators." + s + ".tickRate"),
                     config.getStringList("generators." + s + ".lore")));

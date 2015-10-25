@@ -62,7 +62,6 @@ public class ChestListeners implements Listener {
                 if (gen.isChestBlockThis(c)) {
                     if (gen.getChestAtLocation(e.getClickedBlock().getLocation()) == null) return;
                     gen.getChestAtLocation(e.getClickedBlock().getLocation()).updateChest(c);
-                    Bukkit.broadcastMessage("Updated chest!");
                 }
             }
         }

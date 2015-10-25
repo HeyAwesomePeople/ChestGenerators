@@ -3,10 +3,7 @@ package me.HeyAwesomePeople.ChestGenerators;
 import me.HeyAwesomePeople.ChestGenerators.CustomConfigs.ChestConfig;
 import me.HeyAwesomePeople.ChestGenerators.CustomConfigs.GeneratorConfig;
 import me.HeyAwesomePeople.ChestGenerators.CustomConfigs.OldConfig;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -35,6 +32,9 @@ public class ChestGenerators extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+
+        World templateworld = this.getServer().createWorld(new WorldCreator("ASkyBlock"));
+
         methods = new Methods();
         chestConfig = new ChestConfig();
         genConfig = new GeneratorConfig();
@@ -44,11 +44,13 @@ public class ChestGenerators extends JavaPlugin {
         methods.loadChestGenerators();
 
         if (!getConfig().getBoolean("convertedOldChests")) {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Converting old chests..." + ChatColor.RED + "This may take a few minutes");
             convertOldChests();
         }
 
         Bukkit.getServer().getPluginManager().registerEvents(new ChestListeners(), this);
 
+        // methods.cleanChests();
     }
 
     public void createFiles() {
@@ -57,7 +59,7 @@ public class ChestGenerators extends JavaPlugin {
         }
 
         if (!filechests.exists()) {
-            chestConfig.getCustomConfig().set("chest.irongenerator.234-543-45-WorldName", 42);
+            chestConfig.getCustomConfig().set("chest.irongenerator.234_54_45_world", 42);
             chestConfig.saveCustomConfig();
         }
 
@@ -90,7 +92,8 @@ public class ChestGenerators extends JavaPlugin {
             }
         }
         getConfig().set("convertedOldChests", true);
-        Bukkit.broadcastMessage("Converted old chests!");
+        saveConfig();
+        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "[ChestGenerators] Converted Old Chests!");
     }
 
     @Override

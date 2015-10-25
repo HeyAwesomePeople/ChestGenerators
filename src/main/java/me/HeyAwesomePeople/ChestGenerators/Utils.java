@@ -13,17 +13,17 @@ public class Utils {
     public static String locationToString(Location loc) {
         String s = "";
         s += loc.getBlockX();
-        s += "-";
+        s += "_";
         s += loc.getBlockY();
-        s += "-";
+        s += "_";
         s += loc.getBlockZ();
-        s += "-";
+        s += "_";
         s += loc.getWorld().getName();
         return s;
     }
 
     public static Location stringToLocation(String s) {
-        String[] l = s.split("-");// 0,x 1,y 2,z 3,worldmame
+        String[] l = s.split("_");// 0,x 1,y 2,z 3,worldmame
         if (Bukkit.getWorld(l[3]) == null) {
             return null;
         }
