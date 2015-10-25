@@ -97,7 +97,6 @@ public class ChestGeneratorType {
         try {
             statement = plugin.sql.openConnection().prepareStatement("INSERT INTO chests (Location, Generator, ToAdd)" +
                     " VALUES ('" + Utils.locationToString(n.location) + "','" + configName + "','" + n.amountThatCanBeAdded + "')");
-            Bukkit.getConsoleSender().sendMessage("Hey, mysql.");
                     statement.executeUpdate();
         } catch (SQLException sqlE) {
             sqlE.printStackTrace();
