@@ -5,11 +5,11 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Chest;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,41 +40,54 @@ public class ChestGeneratorType {
     }
 
     public void createTask(final long delay, final long interval) {
-        task = Bukkit.getScheduler().runTaskTimer(plugin, new Runnable() {
+        // This ASync timer is a repeating task which runs on a seperate thread than the main one.
+        task = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
             public void run() {
+                if (chests.isEmpty()) {
+                    return;
+                }
+                System.out.print("1");
+                long startTime = System.nanoTime();
 
                 String mysqlS = "INSERT INTO chests (Location, ToAdd) VALUES ";
+                System.out.print("2");
                 int runs = 0;
-                for (Chests c : chests) {
+                for (final Chests c : chests) {
+                    System.out.print("3");
                     if (runs == chests.size() - 1) {
+                        System.out.print("3.1");
                         c.increase();
                         mysqlS += "('" + Utils.locationToString(c.location) + "','" + c.amountThatCanBeAdded + "')";
                         break;
                     }
+                    System.out.print("3.01");
                     c.increase();
                     mysqlS += "('" + Utils.locationToString(c.location) + "','" + c.amountThatCanBeAdded + "'), ";
                     runs++;
                 }
-                // NOTE Should take less than 25ms
-                // NOTE orginal fix took 120ms average
-
+                System.out.print("4");
                 final String state = mysqlS;
+                final int runF = runs;
 
-                Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
-                    public void run() {
-                        java.sql.PreparedStatement statement;
-                        try {
-                            statement = plugin.sql.openConnection().prepareStatement(state);
-                            statement.executeUpdate();
-                        } catch (SQLException sqlE) {
-                            sqlE.printStackTrace();
-                        } catch (ClassNotFoundException e) {
-                            e.printStackTrace();
-                        }
-
-                        //TODO caluclate how fast this runs to mysql database
-                    }
-                });
+                System.out.print("5");
+                java.sql.PreparedStatement statement;
+                try {
+                    System.out.print("6");
+                    statement = plugin.sql.openConnection().prepareStatement("TRUNCATE chests");
+                    statement.executeUpdate();
+                    System.out.print("7");
+                    statement = plugin.sql.openConnection().prepareStatement(state);
+                    statement.executeUpdate();
+                    System.out.print("8");
+                } catch (SQLException sqlE) {
+                    sqlE.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+                System.out.print("9");
+                long stopTime = System.nanoTime();
+                System.out.print("Timing for " + runF + " chests... " + (stopTime - startTime) / 1000000 + "ms!");
+                System.out.print("10");
             }
         }, delay, interval);
     }
@@ -93,17 +106,41 @@ public class ChestGeneratorType {
         return leftLimit + (long) (Math.random() * (rightLimit - leftLimit));
     }
 
+    public void addNewChest(final Chests n) {
+        chests.add(n);
+        Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+            public void run() {
+                java.sql.PreparedStatement statement;
+                try {
+                    statement = plugin.sql.openConnection().prepareStatement("INSERT INTO chests (Location, ToAdd) VALUES ('" + Utils.locationToString(n.location) + "', '" + n.amountThatCanBeAdded + "')");
+                    statement.executeUpdate();
+                } catch (SQLException sqlE) {
+                    sqlE.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
     public void loadChests() {
-        FileConfiguration config = plugin.chestConfig.getCustomConfig();
         int count = 0;
-        if (config.getConfigurationSection("chest." + configName) == null) {
-            return;
+        java.sql.PreparedStatement statement;
+        try {
+            statement = plugin.sql.openConnection().prepareStatement("SELECT * FROM chests");
+            ResultSet result = statement.executeQuery();
+
+            while (result.next()) {
+                count++;
+                chests.add(new Chests(Utils.stringToLocation(result.getString(1)), this, Integer.parseInt(result.getString(2))));
+            }
+        } catch (SQLException sqlE) {
+            sqlE.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
-        for (String s : config.getConfigurationSection("chest." + configName).getKeys(false)) {
-            chests.add(new Chests(Utils.stringToLocation(s), this));
-            count++;
-        }
-        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "[ChestGenerators] Loaded " + count + " " + this.name + ChatColor.GREEN + " chests!");
+
+        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "[ChestGenerators] Loaded " + count + " " + this.name + ChatColor.GREEN + " chests from MySQL!");
     }
 
     public ItemStack getChest() {

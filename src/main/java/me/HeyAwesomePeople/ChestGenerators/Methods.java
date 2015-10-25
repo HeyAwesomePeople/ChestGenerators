@@ -3,7 +3,6 @@ package me.HeyAwesomePeople.ChestGenerators;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -37,7 +36,7 @@ public class Methods {
     }
 
     public boolean doesConfigHaveGenerator(String s) {
-        return plugin.chestConfig.getCustomConfig().contains("generators." + s);
+        return plugin.genConfig.getCustomConfig().contains("generators." + s);
     }
 
     public List<ItemStack> getItems(String s, FileConfiguration config) {

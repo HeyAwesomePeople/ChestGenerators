@@ -2,13 +2,8 @@ package me.HeyAwesomePeople.ChestGenerators;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.sql.SQLException;
 import java.util.Random;
@@ -22,11 +17,11 @@ public class Chests {
 
     public Integer amountThatCanBeAdded = 0;
 
-    public Chests(Location l, ChestGeneratorType type) {
+    public Chests(Location l, ChestGeneratorType type, Integer a) {
         this.location = l;
         this.type = type;
         this.interval = type.regen;
-        save();
+        this.amountThatCanBeAdded = a;
     }
 
     public void increase() {
@@ -34,36 +29,48 @@ public class Chests {
     }
 
     public void updateChest(Chest c) {
-        FileConfiguration config = plugin.chestConfig.getCustomConfig();
-        for (int valuea = 1; valuea <= config.getInt("chest." + type.configName + "." + Utils.locationToString(location)); valuea++) {
+        for (int valuea = 1; valuea <= amountThatCanBeAdded; valuea++) {
             Random r = new Random();
             int value = r.nextInt(type.items.size());
             ItemStack i = type.items.get(value);
             c.getBlockInventory().addItem(i);
         }
-        reset();
+        amountThatCanBeAdded = 0;
         c.update();
-    }
 
-    public void save() {
-        FileConfiguration config = plugin.chestConfig.getCustomConfig();
-        if (config.contains("chest." + type.configName + "." + Utils.locationToString(location))) return;
-        config.set("chest." + type.configName + "." + Utils.locationToString(location), 0);
-        plugin.chestConfig.saveCustomConfig();
-    }
-
-    public void reset() {
-        FileConfiguration config = plugin.chestConfig.getCustomConfig();
-        config.set("chest." + type.configName + "." + Utils.locationToString(location), 0);
-        plugin.chestConfig.saveCustomConfig();
+        Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+            public void run() {
+                java.sql.PreparedStatement statement;
+                try {
+                    statement = plugin.sql.openConnection().prepareStatement("UPDATE chests SET ToAdd=? WHERE Location=?");
+                    statement.setInt(1, 0);
+                    statement.setString(2, Utils.locationToString(location));
+                    statement.executeUpdate();
+                } catch (SQLException sqlE) {
+                    sqlE.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     public void remove() {
         type.chests.remove(this);
 
-        FileConfiguration config = plugin.chestConfig.getCustomConfig();
-        config.set("chest." + type.configName + "." + Utils.locationToString(location), null);
-        plugin.chestConfig.saveCustomConfig();
-
+        Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+            public void run() {
+                java.sql.PreparedStatement statement;
+                try {
+                    statement = plugin.sql.openConnection().prepareStatement("DELETE FROM chests WHERE Location=?");
+                    statement.setString(1, Utils.locationToString(location));
+                    statement.executeUpdate();
+                } catch (SQLException sqlE) {
+                    sqlE.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }

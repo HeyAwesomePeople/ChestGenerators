@@ -23,13 +23,14 @@ public class ChestListeners implements Listener {
         ItemStack item = e.getItemInHand();
         for (ChestGeneratorType gen : plugin.generators.values()) {
             if (gen.isChestThis(item)) {
-                gen.chests.add(new Chests(e.getBlock().getLocation(), gen));
+                gen.chests.add(new Chests(e.getBlock().getLocation(), gen, 0));
                 Bukkit.broadcastMessage("Created chest!");
                 break;
             }
         }
     }
 
+    //TODO when breaking, handle as if it were opening so that they get the right amount of items
     @EventHandler
     public void onPlayerBreakChest(BlockBreakEvent e) {
         if (!e.getBlock().getType().equals(Material.CHEST)) return;
@@ -39,6 +40,7 @@ public class ChestListeners implements Listener {
 
         for (ChestGeneratorType gen : plugin.generators.values()) {
             if (gen.isChestBlockThis(c)) {
+                gen.getChestAtLocation(e.getBlock().getLocation()).updateChest(c);
                 if (gen.getChestAtLocation(e.getBlock().getLocation()) != null) {
                     gen.getChestAtLocation(e.getBlock().getLocation()).remove();
 

@@ -1,6 +1,5 @@
 package me.HeyAwesomePeople.ChestGenerators;
 
-import me.HeyAwesomePeople.ChestGenerators.CustomConfigs.ChestConfig;
 import me.HeyAwesomePeople.ChestGenerators.CustomConfigs.GeneratorConfig;
 import me.HeyAwesomePeople.ChestGenerators.CustomConfigs.OldConfig;
 import me.HeyAwesomePeople.ChestGenerators.mysql.MySQL;
@@ -15,7 +14,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 
 public class ChestGenerators extends JavaPlugin {
@@ -23,12 +25,10 @@ public class ChestGenerators extends JavaPlugin {
 
     public MySQLMethods mysqlmethods;
     public Methods methods;
-    public ChestConfig chestConfig;
     public GeneratorConfig genConfig;
     public OldConfig oldConfig;
 
     private File fileconfig = new File(this.getDataFolder() + File.separator + "config.yml");
-    private File filechests = new File(this.getDataFolder() + File.separator + "chests.yml");
     private File filegenerators = new File(this.getDataFolder() + File.separator + "generators.yml");
 
     public HashMap<String, ChestGeneratorType> generators = new HashMap<String, ChestGeneratorType>();
@@ -48,7 +48,6 @@ public class ChestGenerators extends JavaPlugin {
         mySql();
 
         methods = new Methods();
-        chestConfig = new ChestConfig();
         genConfig = new GeneratorConfig();
         oldConfig = new OldConfig();
 
@@ -62,7 +61,7 @@ public class ChestGenerators extends JavaPlugin {
 
         Bukkit.getServer().getPluginManager().registerEvents(new ChestListeners(), this);
 
-        // methods.cleanChests();
+        // methods.cleanChests(); TODO
     }
 
     public void mySql() {
@@ -96,11 +95,6 @@ public class ChestGenerators extends JavaPlugin {
             this.saveDefaultConfig();
         }
 
-        if (!filechests.exists()) {
-            chestConfig.getCustomConfig().set("chest.irongenerator.234_54_45_world", 42);
-            chestConfig.saveCustomConfig();
-        }
-
         if (!filegenerators.exists()) {
             List<String> list  = new ArrayList<String>();
             list.add("&7Generated Item&8: &aIron");
@@ -126,7 +120,7 @@ public class ChestGenerators extends JavaPlugin {
 
             Location l = new Location(Bukkit.getWorld(split[3]), Double.parseDouble(split[0]), Double.parseDouble(split[1]), Double.parseDouble(split[2]));
             if (generators.containsKey(generator)) {
-                generators.get(generator).chests.add(new Chests(l, generators.get(generator)));
+                generators.get(generator).addNewChest(new Chests(l, generators.get(generator), 0));
             }
         }
         getConfig().set("convertedOldChests", true);
