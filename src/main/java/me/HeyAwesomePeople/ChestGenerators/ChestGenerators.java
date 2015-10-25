@@ -110,6 +110,7 @@ public class ChestGenerators extends JavaPlugin {
 
     public void convertOldChests() {
         FileConfiguration config = oldConfig.getOldConfig();
+        HashMap<Location, ChestGeneratorType> chests = new HashMap<Location, ChestGeneratorType>();
         int count = 0;
         for (String s : config.getKeys(false)) {
             String generator = config.getString(s).toLowerCase();
@@ -122,9 +123,11 @@ public class ChestGenerators extends JavaPlugin {
             Location l = new Location(Bukkit.getWorld(split[3]), Double.parseDouble(split[0]), Double.parseDouble(split[1]), Double.parseDouble(split[2]));
             if (generators.containsKey(generator)) {
                 count++;
-                generators.get(generator).addNewChest(new Chests(l, generators.get(generator), 0));
+                chests.put(l, generators.get(generator));
+                //generators.get(generator).addNewChest(new Chests(l, generators.get(generator), 0));
             }
         }
+        methods.addChests(chests);
         getConfig().set("convertedOldChests", true);
         saveConfig();
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "[ParallaxGens] Converted Old Chests! " + count);
