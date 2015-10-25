@@ -60,6 +60,7 @@ public class ChestListeners implements Listener {
 
             for (ChestGeneratorType gen : plugin.generators.values()) {
                 if (gen.isChestBlockThis(c)) {
+                    if (e.getPlayer().getItemInHand().getType().equals(Material.SIGN)) return;
                     if (gen.getChestAtLocation(e.getClickedBlock().getLocation()) == null) return;
                     gen.getChestAtLocation(e.getClickedBlock().getLocation()).updateChest(c);
                 }

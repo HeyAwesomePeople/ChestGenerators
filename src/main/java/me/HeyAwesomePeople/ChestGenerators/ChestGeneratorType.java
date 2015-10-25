@@ -47,6 +47,7 @@ public class ChestGeneratorType {
                 int runs = 0;
                 for (Chests c : chests) {
                     if (runs == chests.size() - 1) {
+                        c.increase();
                         mysqlS += "('" + Utils.locationToString(c.location) + "','" + c.amountThatCanBeAdded + "')";
                         break;
                     }
@@ -54,6 +55,8 @@ public class ChestGeneratorType {
                     mysqlS += "('" + Utils.locationToString(c.location) + "','" + c.amountThatCanBeAdded + "'), ";
                     runs++;
                 }
+                // NOTE Should take less than 25ms
+                // NOTE orginal fix took 120ms average
 
                 final String state = mysqlS;
 
@@ -68,23 +71,10 @@ public class ChestGeneratorType {
                         } catch (ClassNotFoundException e) {
                             e.printStackTrace();
                         }
+
+                        //TODO caluclate how fast this runs to mysql database
                     }
                 });
-
-                long startTime = System.nanoTime();
-                int count = 0;
-                // cleanChests();
-                FileConfiguration config = plugin.chestConfig.getCustomConfig();
-                if (config.contains("chest." + configName)) {
-                    for (String s : config.getConfigurationSection("chest." + configName).getKeys(false)) {
-                        config.set("chest." + configName + "." + s, config.getInt("chest." + configName + "." + s) + amount);
-                        count++;
-                    }
-                    plugin.chestConfig.saveCustomConfig();
-                }
-                long endTime = System.nanoTime();
-                Bukkit.broadcastMessage("Time it took to edit " + count + " chests in the config: " + (endTime - startTime) / 1000000 + "ms");
-                // NOTE seems to take about 3ms
             }
         }, delay, interval);
     }
