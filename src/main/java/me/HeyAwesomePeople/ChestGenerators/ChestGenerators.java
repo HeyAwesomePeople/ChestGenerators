@@ -148,13 +148,13 @@ public class ChestGenerators extends JavaPlugin {
                         sender.sendMessage(ChatColor.RED + "Player not online.");
                         return false;
                     }
-                    Player p = Bukkit.getPlayer(args[1]);
+                    Player p = Bukkit.getPlayer(name);
                     String chestgenerator = args[2];
                     if (!methods.doesConfigHaveGenerator(args[2])) {
                         sender.sendMessage(ChatColor.RED + "That chest generator is not valid!");
                         return false;
                     }
-                    if (!generators.containsKey(name.toLowerCase())) {
+                    if (!generators.containsKey(chestgenerator.toLowerCase())) {
                         sender.sendMessage(ChatColor.RED + "Chest generator was unable to be accessed. Available generators: " + Arrays.toString(generators.keySet().toArray()));
                         return false;
                     }
@@ -163,9 +163,9 @@ public class ChestGenerators extends JavaPlugin {
                         if (i == null) count++;
                     }
                     if (count > 0) {
-                        p.getInventory().addItem(generators.get(name).getChest());
+                        p.getInventory().addItem(generators.get(chestgenerator).getChest());
                     } else {
-                        p.getWorld().dropItem(p.getLocation(), generators.get(name).getChest());
+                        p.getWorld().dropItem(p.getLocation(), generators.get(chestgenerator).getChest());
                     }
                 } else {
                     sender.sendMessage(ChatColor.RED + "Invalid subcommand!");
