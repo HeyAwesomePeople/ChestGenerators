@@ -3,6 +3,7 @@ package me.HeyAwesomePeople.ChestGenerators;
 import me.HeyAwesomePeople.ChestGenerators.CustomConfigs.ChestConfig;
 import me.HeyAwesomePeople.ChestGenerators.CustomConfigs.GeneratorConfig;
 import me.HeyAwesomePeople.ChestGenerators.CustomConfigs.OldConfig;
+import me.HeyAwesomePeople.ChestGenerators.mysql.MySQL;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -12,12 +13,15 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.*;
 
 
 public class ChestGenerators extends JavaPlugin {
     public static ChestGenerators instance;
 
+    public MySQLMethods mysqlmethods;
     public Methods methods;
     public ChestConfig chestConfig;
     public GeneratorConfig genConfig;
@@ -29,11 +33,19 @@ public class ChestGenerators extends JavaPlugin {
 
     public HashMap<String, ChestGeneratorType> generators = new HashMap<String, ChestGeneratorType>();
 
+    public Boolean connect = true;
+    public MySQL sql;
+	public Connection c;
+
     @Override
     public void onEnable() {
         instance = this;
 
         World templateworld = this.getServer().createWorld(new WorldCreator("ASkyBlock"));
+
+        mysqlmethods = new MySQLMethods();
+
+        mySql();
 
         methods = new Methods();
         chestConfig = new ChestConfig();
@@ -44,13 +56,39 @@ public class ChestGenerators extends JavaPlugin {
         methods.loadChestGenerators();
 
         if (!getConfig().getBoolean("convertedOldChests")) {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Converting old chests..." + ChatColor.RED + "This may take a few minutes");
+            Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "[ParallaxGens] Converting old chests..." + ChatColor.RED + "This will take a while.");
             convertOldChests();
         }
 
         Bukkit.getServer().getPluginManager().registerEvents(new ChestListeners(), this);
 
         // methods.cleanChests();
+    }
+
+    public void mySql() {
+        if (connect) {
+            sql = new MySQL(this, getConfig().getString("mysql.host"), getConfig().getString("mysql.port"),
+                    getConfig().getString("mysql.database"), getConfig().getString("mysql.user"), getConfig().getString("mysql.password"));
+            attemptMySQLConnection();
+        }
+    }
+
+    public void attemptMySQLConnection() {
+        Bukkit.getConsoleSender().sendMessage(ChatColor.BLUE + "[ParallaxGens] Attempting to connect to MySQL... This may take up to 10 seconds.");
+        try {
+            c = sql.openConnection();
+            connect = true;
+            Bukkit.getConsoleSender().sendMessage(ChatColor.BLUE + "[ParallaxGens] Successfully connected to MySQL.");
+            mysqlmethods.createTables();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            connect = false;
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[ParallaxGens] MySQL Exception Error! Full functionality will not work until problem is resolved.");
+        } catch (ClassNotFoundException c) {
+            c.printStackTrace();
+            connect = false;
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[ParallaxGens] MySQL ClassNotFound Error! Full functionality will not work until problem is resolved.");
+        }
     }
 
     public void createFiles() {
@@ -93,7 +131,7 @@ public class ChestGenerators extends JavaPlugin {
         }
         getConfig().set("convertedOldChests", true);
         saveConfig();
-        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "[ChestGenerators] Converted Old Chests!");
+        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "[ParallaxGens] Converted Old Chests!");
     }
 
     @Override

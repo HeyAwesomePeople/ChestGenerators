@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.sql.SQLException;
 import java.util.Random;
 
 public class Chests {
@@ -19,11 +20,17 @@ public class Chests {
     public ChestGeneratorType type;
     public Integer interval;
 
+    public Integer amountThatCanBeAdded = 0;
+
     public Chests(Location l, ChestGeneratorType type) {
         this.location = l;
         this.type = type;
         this.interval = type.regen;
         save();
+    }
+
+    public void increase() {
+        amountThatCanBeAdded++;
     }
 
     public void updateChest(Chest c) {

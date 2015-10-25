@@ -16,7 +16,7 @@ public class ChestListeners implements Listener {
 
     @EventHandler
     public void onPlayerPlaceChest(BlockPlaceEvent e) {
-        if (e.getBlock().getType().equals(Material.CHEST)) return;
+        if (!e.getBlock().getType().equals(Material.CHEST)) return;
         if (!e.getItemInHand().getType().equals(Material.CHEST)) return;
         if (!e.getItemInHand().hasItemMeta()) return;
         if (!e.getItemInHand().getItemMeta().hasDisplayName() || !e.getItemInHand().getItemMeta().hasLore()) return;
@@ -32,7 +32,7 @@ public class ChestListeners implements Listener {
 
     @EventHandler
     public void onPlayerBreakChest(BlockBreakEvent e) {
-        if (e.getBlock().getType().equals(Material.CHEST)) return;
+        if (!e.getBlock().getType().equals(Material.CHEST)) return;
         if (e.getBlock().getState() == null) return;
 
         Chest c = (Chest) e.getBlock().getState();

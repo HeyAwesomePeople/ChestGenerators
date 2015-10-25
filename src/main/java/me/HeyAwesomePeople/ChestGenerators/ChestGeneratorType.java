@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +42,35 @@ public class ChestGeneratorType {
     public void createTask(final long delay, final long interval) {
         task = Bukkit.getScheduler().runTaskTimer(plugin, new Runnable() {
             public void run() {
+
+                String mysqlS = "INSERT INTO chests (Location, ToAdd) VALUES ";
+                int runs = 0;
+                for (Chests c : chests) {
+                    if (runs == chests.size() - 1) {
+                        mysqlS += "('" + Utils.locationToString(c.location) + "','" + c.amountThatCanBeAdded + "')";
+                        break;
+                    }
+                    c.increase();
+                    mysqlS += "('" + Utils.locationToString(c.location) + "','" + c.amountThatCanBeAdded + "'), ";
+                    runs++;
+                }
+
+                final String state = mysqlS;
+
+                Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+                    public void run() {
+                        java.sql.PreparedStatement statement;
+                        try {
+                            statement = plugin.sql.openConnection().prepareStatement(state);
+                            statement.executeUpdate();
+                        } catch (SQLException sqlE) {
+                            sqlE.printStackTrace();
+                        } catch (ClassNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
                 long startTime = System.nanoTime();
                 int count = 0;
                 // cleanChests();
