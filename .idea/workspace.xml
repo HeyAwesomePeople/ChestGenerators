@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e609a2c1-85ce-47fd-af6c-c06c0c9f3b4a" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/me/HeyAwesomePeople/ChestGenerators/ChestGenerators.java" afterPath="$PROJECT_DIR$/src/main/java/me/HeyAwesomePeople/ChestGenerators/ChestGenerators.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/me/HeyAwesomePeople/ChestGenerators/Methods.java" afterPath="$PROJECT_DIR$/src/main/java/me/HeyAwesomePeople/ChestGenerators/Methods.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/me/HeyAwesomePeople/ChestGenerators/ChestGeneratorType.java" afterPath="$PROJECT_DIR$/src/main/java/me/HeyAwesomePeople/ChestGenerators/ChestGeneratorType.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/me/HeyAwesomePeople/ChestGenerators/MySQLMethods.java" afterPath="$PROJECT_DIR$/src/main/java/me/HeyAwesomePeople/ChestGenerators/MySQLMethods.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="ChestGenerators.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -29,7 +30,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/me/HeyAwesomePeople/ChestGenerators/ChestGenerators.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="110" column="0" selection-start-line="110" selection-start-column="0" selection-end-line="133" selection-end-column="5" />
+              <caret line="129" column="32" selection-start-line="129" selection-start-column="32" selection-end-line="129" selection-end-column="32" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#4442#4472#0" expanded="true" />
@@ -38,11 +39,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MySQLMethods.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="MySQLMethods.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/me/HeyAwesomePeople/ChestGenerators/MySQLMethods.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="0" column="6" selection-start-line="0" selection-start-column="6" selection-end-line="0" selection-end-column="6" />
+            <state vertical-scroll-proportion="0.29402515">
+              <caret line="13" column="52" selection-start-line="13" selection-start-column="52" selection-end-line="13" selection-end-column="52" />
               <folding />
             </state>
           </provider>
@@ -52,24 +53,24 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/me/HeyAwesomePeople/ChestGenerators/ChestGeneratorType.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="111" column="13" selection-start-line="111" selection-start-column="13" selection-end-line="111" selection-end-column="13" />
+              <caret line="98" column="0" selection-start-line="98" selection-start-column="0" selection-end-line="98" selection-end-column="0" />
               <folding>
-                <element signature="e#1391#3036#0" expanded="true" />
-                <element signature="e#3035#3036#0" expanded="true" />
-                <element signature="e#3090#3091#0" expanded="true" />
-                <element signature="e#3124#3125#0" expanded="true" />
-                <element signature="e#3155#3156#0" expanded="true" />
-                <element signature="e#3205#3206#0" expanded="true" />
+                <element signature="e#1404#3049#0" expanded="true" />
+                <element signature="e#3048#3049#0" expanded="true" />
+                <element signature="e#3103#3104#0" expanded="true" />
+                <element signature="e#3137#3138#0" expanded="true" />
+                <element signature="e#3168#3169#0" expanded="true" />
+                <element signature="e#3218#3219#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Methods.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Methods.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/me/HeyAwesomePeople/ChestGenerators/Methods.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.4119497">
-              <caret line="73" column="29" selection-start-line="73" selection-start-column="29" selection-end-line="73" selection-end-column="29" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="65" column="21" selection-start-line="65" selection-start-column="21" selection-end-line="65" selection-end-column="21" />
               <folding />
             </state>
           </provider>
@@ -126,12 +127,12 @@
         <option value="$PROJECT_DIR$/src/main/java/me/HeyAwesomePeople/ChestGenerators/mysql/Database.java" />
         <option value="$PROJECT_DIR$/src/main/resources/config.yml" />
         <option value="$PROJECT_DIR$/src/main/java/me/HeyAwesomePeople/ChestGenerators/Chests.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/HeyAwesomePeople/ChestGenerators/MySQLMethods.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/HeyAwesomePeople/ChestGenerators/ChestListeners.java" />
         <option value="$PROJECT_DIR$/src/main/resources/plugin.yml" />
+        <option value="$PROJECT_DIR$/src/main/java/me/HeyAwesomePeople/ChestGenerators/Methods.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/HeyAwesomePeople/ChestGenerators/ChestGeneratorType.java" />
         <option value="$PROJECT_DIR$/src/main/java/me/HeyAwesomePeople/ChestGenerators/ChestGenerators.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/HeyAwesomePeople/ChestGenerators/Methods.java" />
+        <option value="$PROJECT_DIR$/src/main/java/me/HeyAwesomePeople/ChestGenerators/MySQLMethods.java" />
       </list>
     </option>
   </component>
@@ -636,12 +637,12 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="117" column="22" selection-start-line="117" selection-start-column="22" selection-end-line="117" selection-end-column="22" />
           <folding>
-            <element signature="e#1391#3036#0" expanded="true" />
-            <element signature="e#3035#3036#0" expanded="true" />
-            <element signature="e#3090#3091#0" expanded="true" />
-            <element signature="e#3124#3125#0" expanded="true" />
-            <element signature="e#3155#3156#0" expanded="true" />
-            <element signature="e#3205#3206#0" expanded="true" />
+            <element signature="e#1404#3049#0" expanded="true" />
+            <element signature="e#3048#3049#0" expanded="true" />
+            <element signature="e#3103#3104#0" expanded="true" />
+            <element signature="e#3137#3138#0" expanded="true" />
+            <element signature="e#3168#3169#0" expanded="true" />
+            <element signature="e#3218#3219#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -706,12 +707,12 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="58" column="17" selection-start-line="58" selection-start-column="17" selection-end-line="58" selection-end-column="17" />
           <folding>
-            <element signature="e#1391#3036#0" expanded="true" />
-            <element signature="e#3035#3036#0" expanded="true" />
-            <element signature="e#3090#3091#0" expanded="true" />
-            <element signature="e#3124#3125#0" expanded="true" />
-            <element signature="e#3155#3156#0" expanded="true" />
-            <element signature="e#3205#3206#0" expanded="true" />
+            <element signature="e#1404#3049#0" expanded="true" />
+            <element signature="e#3048#3049#0" expanded="true" />
+            <element signature="e#3103#3104#0" expanded="true" />
+            <element signature="e#3137#3138#0" expanded="true" />
+            <element signature="e#3168#3169#0" expanded="true" />
+            <element signature="e#3218#3219#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -777,12 +778,12 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="39" column="45" selection-start-line="39" selection-start-column="45" selection-end-line="39" selection-end-column="45" />
           <folding>
-            <element signature="e#1391#3036#0" expanded="true" />
-            <element signature="e#3035#3036#0" expanded="true" />
-            <element signature="e#3090#3091#0" expanded="true" />
-            <element signature="e#3124#3125#0" expanded="true" />
-            <element signature="e#3155#3156#0" expanded="true" />
-            <element signature="e#3205#3206#0" expanded="true" />
+            <element signature="e#1404#3049#0" expanded="true" />
+            <element signature="e#3048#3049#0" expanded="true" />
+            <element signature="e#3103#3104#0" expanded="true" />
+            <element signature="e#3137#3138#0" expanded="true" />
+            <element signature="e#3168#3169#0" expanded="true" />
+            <element signature="e#3218#3219#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -830,6 +831,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="16" column="22" selection-start-line="16" selection-start-column="22" selection-end-line="16" selection-end-column="22" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -885,25 +887,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/HeyAwesomePeople/ChestGenerators/ChestGeneratorType.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="111" column="13" selection-start-line="111" selection-start-column="13" selection-end-line="111" selection-end-column="13" />
-          <folding>
-            <element signature="e#1391#3036#0" expanded="true" />
-            <element signature="e#3035#3036#0" expanded="true" />
-            <element signature="e#3090#3091#0" expanded="true" />
-            <element signature="e#3124#3125#0" expanded="true" />
-            <element signature="e#3155#3156#0" expanded="true" />
-            <element signature="e#3205#3206#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/me/HeyAwesomePeople/ChestGenerators/ChestGenerators.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="110" column="0" selection-start-line="110" selection-start-column="0" selection-end-line="133" selection-end-column="5" />
+          <caret line="129" column="32" selection-start-line="129" selection-start-column="32" selection-end-line="129" selection-end-column="32" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#4442#4472#0" expanded="true" />
@@ -911,18 +898,33 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/HeyAwesomePeople/ChestGenerators/MySQLMethods.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/me/HeyAwesomePeople/ChestGenerators/ChestGeneratorType.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="6" selection-start-line="0" selection-start-column="6" selection-end-line="0" selection-end-column="6" />
-          <folding />
+          <caret line="98" column="0" selection-start-line="98" selection-start-column="0" selection-end-line="98" selection-end-column="0" />
+          <folding>
+            <element signature="e#1404#3049#0" expanded="true" />
+            <element signature="e#3048#3049#0" expanded="true" />
+            <element signature="e#3103#3104#0" expanded="true" />
+            <element signature="e#3137#3138#0" expanded="true" />
+            <element signature="e#3168#3169#0" expanded="true" />
+            <element signature="e#3218#3219#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/me/HeyAwesomePeople/ChestGenerators/Methods.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4119497">
-          <caret line="73" column="29" selection-start-line="73" selection-start-column="29" selection-end-line="73" selection-end-column="29" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="65" column="21" selection-start-line="65" selection-start-column="21" selection-end-line="65" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/me/HeyAwesomePeople/ChestGenerators/MySQLMethods.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.29402515">
+          <caret line="13" column="52" selection-start-line="13" selection-start-column="52" selection-end-line="13" selection-end-column="52" />
           <folding />
         </state>
       </provider>

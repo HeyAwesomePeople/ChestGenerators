@@ -39,7 +39,9 @@ public class ChestGeneratorType {
         startTask();
     }
 
-    /*********** REPEATING TASK **************/
+    /**
+     * ******** REPEATING TASK *************
+     */
     public void createTask(final long delay, final long interval) {
         task = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
             public void run() {
@@ -89,7 +91,9 @@ public class ChestGeneratorType {
         createTask(nextLong(), this.regen);
     }
 
-    /*********** ADD NEW CHEST INTO THE MYSQL **************/
+    /**
+     * ******** ADD NEW CHEST INTO THE MYSQL *************
+     */
     public void addNewChest(final Chests n) {
         chests.add(n);
 
@@ -97,15 +101,20 @@ public class ChestGeneratorType {
         try {
             statement = plugin.sql.openConnection().prepareStatement("INSERT INTO chests (Location, Generator, ToAdd)" +
                     " VALUES ('" + Utils.locationToString(n.location) + "','" + configName + "','" + n.amountThatCanBeAdded + "')");
-                    statement.executeUpdate();
+            statement.executeUpdate();
+
         } catch (SQLException sqlE) {
             sqlE.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    /*********** LOAD CHESTS FROM MYSQL **************/
+    /**
+     * ******** LOAD CHESTS FROM MYSQL *************
+     */
     public void loadChests() {
         int count = 0;
         java.sql.PreparedStatement statement;
@@ -127,7 +136,9 @@ public class ChestGeneratorType {
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "[ChestGenerators] Loaded " + count + " " + this.name + ChatColor.GREEN + " chests from MySQL!");
     }
 
-    /*********** GET THIS GENERATORS CHEST ITEM **************/
+    /**
+     * ******** GET THIS GENERATORS CHEST ITEM *************
+     */
     public ItemStack getChest() {
         ItemStack i = new ItemStack(Material.CHEST);
         ItemMeta im = i.getItemMeta();
@@ -139,7 +150,9 @@ public class ChestGeneratorType {
         return i;
     }
 
-    /*********** CLEANUP UNUSED CHESTS **************/
+    /**
+     * ******** CLEANUP UNUSED CHESTS *************
+     */
     public void cleanChests() {
         for (Chests c : chests) {
             if (c.location.getWorld().getBlockAt(c.location).getState() == null) {
