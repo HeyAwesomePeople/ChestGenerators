@@ -43,51 +43,44 @@ public class ChestGeneratorType {
         // This ASync timer is a repeating task which runs on a seperate thread than the main one.
         task = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
             public void run() {
+                System.out.print(name + ":Chests: " + chests.size());
                 if (chests.isEmpty()) {
                     return;
                 }
-                System.out.print("1");
                 long startTime = System.nanoTime();
-
-                String mysqlS = "INSERT INTO chests (Location, ToAdd) VALUES ";
-                System.out.print("2");
+                StringBuilder mysqlS = new StringBuilder("INSERT INTO chests (Location, Generator, ToAdd) VALUES ");
                 int runs = 0;
+                // NOTE: this loop right here runs more than a second. Is there any way to get this down?
+                // I am looping through all "Chests" objects and getting two things, an int called amountThatCanBeAdded and Location value.
+                // I then add this into a MySQL syntax which will allow me to push thousands of rows at once.
+                // Since this task runs every second, and this for loop runs for more than a second, the workload just continues to increase which doesn't do
+                // well on your CPU usage.. :D
                 for (final Chests c : chests) {
-                    System.out.print("3");
                     if (runs == chests.size() - 1) {
-                        System.out.print("3.1");
                         c.increase();
-                        mysqlS += "('" + Utils.locationToString(c.location) + "','" + c.amountThatCanBeAdded + "')";
+                        mysqlS.append("('" + Utils.locationToString(c.location) + "','" + configName + "','" + c.amountThatCanBeAdded + "')");
                         break;
                     }
-                    System.out.print("3.01");
                     c.increase();
-                    mysqlS += "('" + Utils.locationToString(c.location) + "','" + c.amountThatCanBeAdded + "'), ";
+                    mysqlS.append("('" + Utils.locationToString(c.location) + "','" + configName + "','" + c.amountThatCanBeAdded + "'), ");
                     runs++;
                 }
-                System.out.print("4");
-                final String state = mysqlS;
+                final String state = mysqlS.toString();
                 final int runF = runs;
 
-                System.out.print("5");
                 java.sql.PreparedStatement statement;
                 try {
-                    System.out.print("6");
                     statement = plugin.sql.openConnection().prepareStatement("TRUNCATE chests");
                     statement.executeUpdate();
-                    System.out.print("7");
                     statement = plugin.sql.openConnection().prepareStatement(state);
                     statement.executeUpdate();
-                    System.out.print("8");
                 } catch (SQLException sqlE) {
                     sqlE.printStackTrace();
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
-                System.out.print("9");
                 long stopTime = System.nanoTime();
-                System.out.print("Timing for " + runF + " chests... " + (stopTime - startTime) / 1000000 + "ms!");
-                System.out.print("10");
+                System.out.print(configName + ": Timing for " + runF + " chests... " + (stopTime - startTime) / 1000000 + "ms!");
             }
         }, delay, interval);
     }
@@ -108,31 +101,30 @@ public class ChestGeneratorType {
 
     public void addNewChest(final Chests n) {
         chests.add(n);
-        Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
-            public void run() {
-                java.sql.PreparedStatement statement;
-                try {
-                    statement = plugin.sql.openConnection().prepareStatement("INSERT INTO chests (Location, ToAdd) VALUES ('" + Utils.locationToString(n.location) + "', '" + n.amountThatCanBeAdded + "')");
-                    statement.executeUpdate();
-                } catch (SQLException sqlE) {
-                    sqlE.printStackTrace();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "[ChestGenerators] Added chest to " + this.name);
+        java.sql.PreparedStatement statement;
+        try {
+            statement = plugin.sql.openConnection().prepareStatement("INSERT INTO chests (Location, Generator, ToAdd)" +
+                    " VALUES ('" + Utils.locationToString(n.location) + "','" + configName + "','" + n.amountThatCanBeAdded + "')");
+            statement.executeUpdate();
+        } catch (SQLException sqlE) {
+            sqlE.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public void loadChests() {
         int count = 0;
         java.sql.PreparedStatement statement;
         try {
-            statement = plugin.sql.openConnection().prepareStatement("SELECT * FROM chests");
+            statement = plugin.sql.openConnection().prepareStatement("SELECT * FROM chests WHERE Generator=?");
+            statement.setString(1, configName);
             ResultSet result = statement.executeQuery();
 
             while (result.next()) {
                 count++;
-                chests.add(new Chests(Utils.stringToLocation(result.getString(1)), this, Integer.parseInt(result.getString(2))));
+                chests.add(new Chests(Utils.stringToLocation(result.getString(1)), this, Integer.parseInt(result.getString(3))));
             }
         } catch (SQLException sqlE) {
             sqlE.printStackTrace();

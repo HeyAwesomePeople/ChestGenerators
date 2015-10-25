@@ -12,7 +12,7 @@ public class MySQLMethods {
         java.sql.PreparedStatement statement;
         try {
             statement = plugin.sql.openConnection().
-                    prepareStatement("CREATE TABLE IF NOT EXISTS chests (Location tinytext, ToAdd int)");
+                    prepareStatement("CREATE TABLE IF NOT EXISTS chests (Location tinytext, Generator tinytext, ToAdd int)");
             statement.executeUpdate();
         } catch (SQLException sqlE) {
             sqlE.printStackTrace();
