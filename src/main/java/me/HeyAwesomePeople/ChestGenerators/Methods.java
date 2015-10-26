@@ -60,12 +60,6 @@ public class Methods {
 
 
     public void addChests(HashMap<Location, ChestGeneratorType> map) {
-        StringBuilder mysqlS = new StringBuilder("INSERT INTO chests (Location, Generator, ToAdd) VALUES ");
-        StringBuilder dataDump = new StringBuilder("");
-
-        int runs = 0;
-
-
         java.sql.PreparedStatement statement;
         try {
             statement = plugin.sql.openConnection().prepareStatement("INSERT INTO chests (Location, Generator, ToAdd) VALUES (?,?,?)");
@@ -91,22 +85,6 @@ public class Methods {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        System.out.print(mysqlS);
-        PrintWriter writer = null;
-        PrintWriter writer2 = null;
-        try {
-            writer = new PrintWriter("plugins/ParallaxGens/mysqlDump.txt", "UTF-8");
-            writer2 = new PrintWriter("plugins/ParallaxGens/dataDump.txt", "UTF-8");
-            writer.println(mysqlS);
-            writer2.println(dataDump);
-            writer.close();
-            writer2.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
 
