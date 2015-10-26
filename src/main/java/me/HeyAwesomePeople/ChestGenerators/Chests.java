@@ -29,6 +29,7 @@ public class Chests {
     }
 
     public void updateChest(Chest c) {
+        Bukkit.getConsoleSender().sendMessage("Update Chests.");
         for (int valuea = 1; valuea <= amountThatCanBeAdded; valuea++) {
             Random r = new Random();
             int value = r.nextInt(type.items.size());
@@ -57,7 +58,7 @@ public class Chests {
 
     public void remove() {
         type.chests.remove(this);
-
+        Bukkit.getConsoleSender().sendMessage("Ran delete.");
         Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
             public void run() {
                 java.sql.PreparedStatement statement;

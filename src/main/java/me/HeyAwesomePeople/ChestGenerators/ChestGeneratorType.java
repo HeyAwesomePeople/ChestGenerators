@@ -95,6 +95,7 @@ public class ChestGeneratorType {
      * ******** ADD NEW CHEST INTO THE MYSQL *************
      */
     public void addNewChest(final Chests n) {
+        Bukkit.getConsoleSender().sendMessage("added new chest");
         chests.add(n);
 
         java.sql.PreparedStatement statement;
@@ -116,6 +117,7 @@ public class ChestGeneratorType {
      * ******** LOAD CHESTS FROM MYSQL *************
      */
     public void loadChests() {
+        Bukkit.getConsoleSender().sendMessage("loaded chests");
         int count = 0;
         java.sql.PreparedStatement statement;
         try {
@@ -154,6 +156,7 @@ public class ChestGeneratorType {
      * ******** CLEANUP UNUSED CHESTS *************
      */
     public void cleanChests() {
+        Bukkit.getConsoleSender().sendMessage("cleaning chests");
         for (Chests c : chests) {
             if (c.location.getWorld().getBlockAt(c.location).getState() == null) {
                 c.remove();

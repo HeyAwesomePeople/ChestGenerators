@@ -73,7 +73,7 @@ public class ChestGenerators extends JavaPlugin {
     }
 
     public void attemptMySQLConnection() {
-        Bukkit.getConsoleSender().sendMessage(ChatColor.BLUE + "[ParallaxGens] Attempting to connect to MySQL... This may take up to 10 seconds.");
+        Bukkit.getConsoleSender().sendMessage(ChatColor.BLUE + "[ParallaxGens] Attempting to connect to MySQL...");
         try {
             c = sql.openConnection();
             connect = true;

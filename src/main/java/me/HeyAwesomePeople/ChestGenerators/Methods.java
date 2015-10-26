@@ -8,7 +8,11 @@ import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.sql.BatchUpdateException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -60,6 +64,16 @@ public class Methods {
 
 
     public void addChests(HashMap<Location, ChestGeneratorType> map) {
+
+        StringBuilder generators = new StringBuilder("[");
+        for (ChestGeneratorType type : plugin.generators.values()) {
+            generators.append(type.configName);
+        }
+        Bukkit.getConsoleSender().sendMessage(generators.toString() + "]");
+
+        StringBuilder dataDump = new StringBuilder("");
+
+
         java.sql.PreparedStatement statement;
         try {
             statement = plugin.sql.openConnection().prepareStatement("INSERT INTO chests (Location, Generator, ToAdd) VALUES (?,?,?);");
@@ -76,6 +90,14 @@ public class Methods {
             }
 
             statement.executeBatch();
+
+            ResultSet rs = null;
+            rs = statement.executeQuery("SELECT * FROM chests");
+
+            while (rs.next()) {
+                dataDump.append("Location: " + rs.getString(1) + " Generator: " + rs.getString(2) + " ToAdd: " + rs.getString(3) + "\n");
+            }
+
         } catch (BatchUpdateException e) {
             int[] i = e.getUpdateCounts();
             Bukkit.getConsoleSender().sendMessage("Values: " + i);
@@ -85,6 +107,17 @@ public class Methods {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter("plugins/ParallaxGens/callDump.txt", "UTF-8");
+            writer.println(dataDump);
+            writer.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
 
