@@ -8,12 +8,12 @@ import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.sql.BatchUpdateException;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Methods {
     private ChestGenerators plugin = ChestGenerators.instance;
@@ -62,7 +62,7 @@ public class Methods {
     public void addChests(HashMap<Location, ChestGeneratorType> map) {
         java.sql.PreparedStatement statement;
         try {
-            statement = plugin.sql.openConnection().prepareStatement("INSERT INTO chests (Location, Generator, ToAdd) VALUES (?,?,?)");
+            statement = plugin.sql.openConnection().prepareStatement("INSERT INTO chests (Location, Generator, ToAdd) VALUES (?,?,?);");
             for (Map.Entry<Location, ChestGeneratorType> entry : map.entrySet()) {
                 Location           loc  = entry.getKey();
                 ChestGeneratorType type = entry.getValue();
